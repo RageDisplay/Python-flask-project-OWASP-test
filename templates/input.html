@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Input Text</h1>
-    <form action="{{ url_for('save_text') }}" method="post">
+    <form action="{{ url_for('save_text') }}?user_id={{ user_id }}" method="post">
         <label for="text">Enter Text:</label>
         <textarea id="text" name="text" rows="4" cols="50" required></textarea><br><br>
         <input type="submit" value="Save">

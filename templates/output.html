@@ -6,6 +6,8 @@
 </head>
 <body>
     <h1>Output Text</h1>
-    <p>{{ text }}</p>
+    <p id="text">
+        Texts for User ID {{ user_id | safe }}: {{ texts | safe }}
+    </p>
 </body>
 </html>
