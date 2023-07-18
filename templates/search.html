@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+</head>
+<body>
+    <h1>search</h1>
+    <form method="post" action="/search">
+        <label for="query">Enter :</label>
+        <input type="text" id="query" name="query" placeholder="Enter" required>
+        <input type="submit" value="Searching">
+    </form>
+
+    <div>
+        <h2>results:</h2>
+        <p>{{ result | safe }}</p>
+    </div>
+</body>
+</html>

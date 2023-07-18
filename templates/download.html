@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manual</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+</head>
+<body>
+    <h1>Manual download</h1>
+    <form action="/downloadfile" method="post">
+        <label for="filename">File name:</label>
+        <input type="text" name="filename" id="filename" required>
+        <button type="submit">download</button>
+    </form>
+</body>
+</html>

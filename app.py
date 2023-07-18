@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, session, url_for
-import sqlite3
+from flask import Flask, render_template, request, redirect, session, url_for, make_response, send_file
+import sqlite3, os
 
 app = Flask(__name__)
 
@@ -43,7 +43,6 @@ def input_text():
 @app.route('/save_text', methods=['GET', 'POST'])
 def save_text():
     if 'username' in session:
-        user_id = request.args.get('user_id')
         global login_data
         
         if request.method == 'POST':
@@ -56,30 +55,62 @@ def save_text():
             cursor.execute(user_idget)
             user_id = cursor.fetchone()
             user_id = user_id[0]
-            sqli = "INSERT INTO texts (text, user_id) VALUES (?, ?)"
-            cursor.execute(sqli, (text, user_id))
+            ins = "INSERT INTO texts (text, user_id) VALUES (?, ?)"
+            cursor.execute(ins, (text, user_id))
             conn.commit()
             conn.close()
             return redirect(url_for('display_text', user_id=user_id))
     else:
         return redirect(url_for('login'))
 
-
 @app.route('/display_text')
 def display_text():
     user_id = request.args.get('user_id')
-
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT text FROM texts WHERE user_id=?', (user_id,))
     texts = cursor.fetchall()
     conn.close()
 
-    if texts:
-        text_combined = ', '.join(text[0] for text in texts)
-        return f'Texts for User ID {user_id}: {text_combined}'
+    global text_combined
+    text_combined = ', '.join(text[0] for text in texts)
+    return render_template('output.html', text_combined=text_combined)
+    
+@app.route('/download', methods=['POST'])
+def download_file():
+    text_to_download = request.form['text']
+    response = make_response(text_to_download)
+    response.headers["Content-Disposition"] = "attachment; filename=text_from_db.txt"
+    return response
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    if request.method == 'POST':
+        query = request.form.get('query')
+        command = "SELECT * FROM texts WHERE user_id LIKE '%" + query + "%'"   #'OR+1=1--   '; echo cat /
+        cursor.execute(command)
+        result = cursor.fetchall()
+        conn.close()
+        return render_template('search.html', result=result)
     else:
-        return f'Texts not found for User ID {user_id}'
+        return render_template('search.html', result='')
+    
+@app.route('/dwld')
+def downloadprom():
+        return render_template('download.html')
+    
+@app.route('/downloadfile', methods=['GET', 'POST'])
+def download_manual():
+    download_direct = os.path.dirname(os.path.abspath(__file__))
+    filename = request.form.get('filename', '')
+    file_path = os.path.join(download_direct, filename)
+
+    try:
+        return send_file(file_path, as_attachment=True)
+    except Exception as e:
+        return str(e), 500
     
 if __name__ == '__main__':
     app.secret_key = '12345'

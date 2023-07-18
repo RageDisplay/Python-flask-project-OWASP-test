@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Output Text</title>
+    <title>Texts</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
 </head>
 <body>
-    <h1>Output Text</h1>
-    <p id="text">
-        Texts for User ID {{ user_id | safe }}: {{ texts | safe }}
-    </p>
+    <h1>Texts:</h1>
+    <p>{{ text_combined | safe }}</p>
+
+    <form action="/download" method="post">
+        <textarea name="text" style="display: none;">{{ text_combined | safe }}</textarea>
+        <input type="submit" value="download">
+    </form>
+    <button onclick="redirectToSearch()">Manual download</button>
+    <script>
+        function redirectToSearch() {
+            window.location.href = "/dwld";
+        }
+    </script>
 </body>
 </html>
+
