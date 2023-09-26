@@ -22,8 +22,7 @@ def authenticate():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
-    query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'"
-    cursor.execute(query)
+    cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password,))
     user = cursor.fetchone()
     conn.close()
 
@@ -51,7 +50,7 @@ def save_text():
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             
-            user_idget ="SELECT id FROM users WHERE username = '" + login_data['username'] + "' AND password = '" + login_data['password'] + "'"
+            user_idget ="SELECT id FROM users WHERE username = '" + login_data['username'] + "' AND password = '" + login_data['password'] + "'"  #уязвимость SQLI
             cursor.execute(user_idget)
             user_id = cursor.fetchone()
             user_id = user_id[0]
