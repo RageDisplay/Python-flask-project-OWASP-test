@@ -22,9 +22,7 @@ def authenticate():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
-    query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'"
-    cursor.execute(query)
-    #cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password,))
+    cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password,))
     user = cursor.fetchone()
     conn.close()
 
