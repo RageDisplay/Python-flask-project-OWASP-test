@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for, make_response, send_file
 import sqlite3, os
+from hashlib import sha256
 
 app = Flask(__name__)
 
@@ -15,7 +16,9 @@ def authenticate():
     global login_data
     
     username = request.form['username']
-    password = request.form['password']
+    passwordenter = request.form['password']
+    
+    password = sha256(passwordenter.encode()).hexdigest()
     
     login_data = {'username': username, 'password': password}
     
