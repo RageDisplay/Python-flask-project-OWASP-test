@@ -1,13 +1,16 @@
-FROM python:3.7.2-alpine3.8
+FROM python:3.8-alpine
+
+COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
 
-COPY requirements.txt .
-
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY /static/styles/. /app/static/styles
 
-EXPOSE 5000
+COPY /templates/. /app/templates
 
-CMD ["python3", "app.py"]
+COPY . /app
+
+CMD ["python", "app.py"]
+
