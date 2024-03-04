@@ -79,6 +79,9 @@ span:focus{
   opacity: 0;
 }
 
+.samebox{
+  flex-direction: column;
+}
 
 .data{
   margin-top: 10px;
