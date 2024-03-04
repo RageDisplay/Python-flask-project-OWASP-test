@@ -16,9 +16,12 @@ def authenticate():
     global login_data
     
     username = request.form['username']
+    
     passwordenter = request.form['password']
     
-    password = sha256(passwordenter.encode()).hexdigest()
+    usernamesault = sha256(username.encode()).hexdigest()
+    
+    password = usernamesault + sha256(passwordenter.encode()).hexdigest()
     
     login_data = {'username': username, 'password': password}
     
@@ -27,7 +30,8 @@ def authenticate():
     
     #query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'"
     #cursor.execute(query)
-    cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password,))
+    
+    cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
     user = cursor.fetchone()
     conn.close()
 

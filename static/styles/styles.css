@@ -1,4 +1,5 @@
 form {
+  
   width: 300px;
   margin: 0 auto;
 }
@@ -32,4 +33,62 @@ textarea {
 p {
   font-size: 18px;
   line-height: 1.5;
+}
+
+body {
+  justify-content: center;
+  display: flex;
+}
+
+main {
+  margin-top: 10%;
+
+}
+
+.main-form{
+  margin-top: 10px;
+}
+
+.box{
+  position: relative;
+  width: 300px;
+  height: 50px;
+}
+
+.box input{
+  width: 100%;
+  border-radius: 15px;
+  padding: 10px;
+
+  outline: none;
+
+}
+
+.box span{
+  position: absolute;
+  margin-top: 0%;
+  left: 10px;
+  padding: 12px;
+
+  transition: 500ms;
+
+}
+
+span:hover,
+span:focus{
+  opacity: 0;
+}
+
+.dimas_yeban{
+  flex-direction: column;
+}
+
+.data{
+  margin-top: 10px;
+  width: 100px;
+  background-color: #f30c0c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
 }

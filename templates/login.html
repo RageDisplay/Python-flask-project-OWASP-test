@@ -2,22 +2,31 @@
 <html>
 <head>
     <title>Login</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "../static/styles/styles.css">
 </head>
 <body>
-    <h1>Login</h1>
-    <form action="{{ url_for('authenticate') }}" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        <input type="submit" value="Login">
-    </form>
-    <button onclick="redirectToSearch()">Search the data</button>
-    <script>
-        function redirectToSearch() {
-            window.location.href = "/search";
-        }
-    </script>
+    <main>
+        <h1>Login</h1>
+        <form action="{{ url_for('authenticate') }}" method="post">
+
+            <div class="box">
+                <input type="text" id="username" name="username" required placeholder="Username">
+            </div>
+
+            <div class="box">    
+                <input type="password" id="password" name="password" required placeholder="Password">
+            </div>    
+
+            <div class="dimas_yeban">
+                <input type="submit" value="Login">
+                <div class="data" type="/button" onclick="redirectToSearch()">Search the data</div>
+            </div>        
+        </form>
+    </main>
 </body>
 </html>
+<script>
+    function redirectToSearch() {
+        window.location.href = "/search";
+    }
+</script>
