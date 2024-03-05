@@ -2,13 +2,14 @@
 <html>
 <head>
     <title>Texts</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "../static/styles/styles.css">
 </head>
 <body>
     <h1>Texts:</h1>
     <p>{{ text_combined | safe }}</p>
 
     <form action="/download" method="post">
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <textarea name="text" style="display: none;">{{ text_combined | safe }}</textarea>
         <input type="submit" value="download">
     </form>
