@@ -63,4 +63,5 @@
 - [CSRF-токен](https://ru.wikipedia.org/wiki/Cross-site_request_forgery)
 
 - docker build -t my_flask_app .
-- docker run -d -p 5000:5000 --name my_container my_flask_app
+- docker run -p 7000:7000 --name my_container my_flask_app
+- https://localhost:7000
