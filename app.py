@@ -1,13 +1,12 @@
 from flask import Flask, render_template, request, redirect, session, url_for, make_response, send_file, abort, jsonify
 from flask_wtf.csrf import generate_csrf
-import secrets, sqlite3, os, psycopg2
+import secrets, os, psycopg2
 
 from hashlib import sha256
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
 
-db_path = 'auth.db'
 login_data = {}
 
 @app.route('/')
@@ -30,9 +29,9 @@ def authenticate():
     
     login_data = {'username': username, 'password': password}
     
-    conn = sqlite3.connect(db_path)
+    conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth")
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+    cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password))
     user = cursor.fetchone()
     conn.close()
     
@@ -61,12 +60,14 @@ def save_text():
         
         if request.method == 'POST':
             text = request.form['text']
-            conn = sqlite3.connect(db_path)
+            conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth")
             cursor = conn.cursor()
-            cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (login_data['username'], login_data['password'],))
+            username = login_data['username']
+            password = login_data['password']
+            cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password))
             user_id = cursor.fetchone()
             user_id = user_id[0]
-            cursor.execute('INSERT INTO texts (text, user_id) VALUES (?, ?)', (text, user_id))
+            cursor.execute('INSERT INTO texts (text, user_id) VALUES (%s, %s)', (text, user_id))
             conn.commit()
             conn.close()
             return redirect(url_for('display_text', user_id=user_id))
@@ -76,9 +77,9 @@ def save_text():
 @app.route('/display_text')
 def display_text():
     user_id = request.args.get('user_id')
-    conn = sqlite3.connect(db_path)
+    conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth")
     cursor = conn.cursor()
-    cursor.execute('SELECT text FROM texts WHERE user_id=?', (user_id,))
+    cursor.execute('SELECT text FROM texts WHERE user_id=%s', (user_id))
     texts = cursor.fetchall()
     conn.close()
 
@@ -106,13 +107,18 @@ def search():
     if not csrf_token:
         abort(403)
         
-    conn = sqlite3.connect(db_path)
+    conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth")
     cursor = conn.cursor()
     
     if request.method == 'POST':
         query = request.form.get('query')
-        cursor.execute('SELECT * FROM texts WHERE user_id LIKE ?', (query,))
-        result = cursor.fetchall()
+        try:
+            user_id = int(query)
+            cursor.execute('SELECT * FROM texts WHERE user_id=%s', (user_id,))
+            result = cursor.fetchall()
+        except ValueError:
+            print("TypeError, enter the user id")
+            result = []
         conn.close()
         csrf_token = session.get('csrf_token')
         return render_template('search.html', result=result, csrf_token=csrf_token)

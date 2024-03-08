@@ -1,12 +1,19 @@
-import sqlite3
+import psycopg2
+from psycopg2 import Error
 from hashlib import sha256
 
 def add_user(username, password):
-    conn = sqlite3.connect('auth.db')
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-    conn.commit()
-    conn.close()
+    try:
+        conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth")
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, password))
+        conn.commit()
+    except (Exception, Error) as error:
+        print("Error while connecting to PostgreSQL", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
 
 name1 = "user1"
 name2 = "user2"
@@ -14,8 +21,6 @@ name3 = "user3"
 pass1 = "12345"
 pass2 = "qwerty"
 pass3 = "12345"
-
-
 
 hash_name1 = sha256(name1.encode()).hexdigest()
 hash_name2 = sha256(name2.encode()).hexdigest()

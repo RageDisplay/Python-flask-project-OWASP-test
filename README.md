@@ -61,3 +61,6 @@
 - [WTForms](https://wtforms.readthedocs.io/en/2.3.x/)
 - [Flask-WTF](https://flask-wtf.readthedocs.io/en/0.14.3/)
 - [CSRF-токен](https://ru.wikipedia.org/wiki/Cross-site_request_forgery)
+
+- docker build -t my_flask_app .
+- docker run -d -p 5000:5000 --name my_container my_flask_app
