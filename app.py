@@ -1,23 +1,11 @@
-<<<<<<< HEAD
 from flask import Flask, render_template, request, redirect, session, url_for, make_response, send_file, abort, jsonify
 from flask_wtf.csrf import generate_csrf
 import secrets, sqlite3, os, psycopg2
-=======
-from flask import Flask, render_template, request, redirect, session, url_for, make_response, send_file, abort
-from flask_wtf.csrf import generate_csrf, CSRFProtect
-
-import secrets
-import sqlite3, os
->>>>>>> f3d80e8c21dd62c97cc0cdf113c63483833025c1
 
 from hashlib import sha256
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
-<<<<<<< HEAD
-=======
-#csrf = CSRFProtect(app)
->>>>>>> f3d80e8c21dd62c97cc0cdf113c63483833025c1
 
 db_path = 'auth.db'
 login_data = {}
@@ -31,7 +19,6 @@ def login():
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
     global login_data
-<<<<<<< HEAD
     
     csrf_token = session.get('csrf_token')
     
@@ -40,16 +27,6 @@ def authenticate():
 
     username = request.form['username']
     password = sha256((sha256(username.encode()).hexdigest() + sha256((request.form['password']).encode()).hexdigest()).encode()).hexdigest()
-=======
-    csrf_token = session.get('csrf_token')
-    if not csrf_token:
-        abort(403)
-    username = request.form['username']
-    passwordenter = request.form['password']
-    usernamesault = sha256(username.encode()).hexdigest()
-    passwordsum = usernamesault + sha256(passwordenter.encode()).hexdigest()
-    password = sha256(passwordsum.encode()).hexdigest()
->>>>>>> f3d80e8c21dd62c97cc0cdf113c63483833025c1
     
     login_data = {'username': username, 'password': password}
     
@@ -58,15 +35,12 @@ def authenticate():
     cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
     user = cursor.fetchone()
     conn.close()
-<<<<<<< HEAD
     
-=======
->>>>>>> f3d80e8c21dd62c97cc0cdf113c63483833025c1
     if user:
         session['username'] = username
         return redirect(url_for('input_text', csrf_token=csrf_token))
     else:
-        return redirect(url_for('login', csrf_token=csrf_token))
+        return redirect(url_for('login'))
 
 @app.route('/input_text')
 def input_text():
@@ -81,10 +55,7 @@ def save_text():
     if 'username' in session:
         global login_data
         csrf_token = session.get('csrf_token')
-<<<<<<< HEAD
         
-=======
->>>>>>> f3d80e8c21dd62c97cc0cdf113c63483833025c1
         if not csrf_token:
             abort(403)
         
@@ -119,15 +90,10 @@ def display_text():
 @app.route('/download', methods=['POST'])
 def download_file():
     csrf_token = session.get('csrf_token')
-<<<<<<< HEAD
     
     if not csrf_token:
         abort(403)
         
-=======
-    if not csrf_token:
-        abort(403)
->>>>>>> f3d80e8c21dd62c97cc0cdf113c63483833025c1
     text_to_download = request.form['text']
     response = make_response(text_to_download)
     response.headers["Content-Disposition"] = "attachment; filename=text_from_db.txt"
@@ -136,15 +102,10 @@ def download_file():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     csrf_token = session.get('csrf_token')
-<<<<<<< HEAD
     
     if not csrf_token:
         abort(403)
         
-=======
-    if not csrf_token:
-        abort(403)
->>>>>>> f3d80e8c21dd62c97cc0cdf113c63483833025c1
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
@@ -167,15 +128,10 @@ def downloadprom():
 @app.route('/downloadfile', methods=['GET', 'POST'])
 def download_manual():
     csrf_token = session.get('csrf_token')
-<<<<<<< HEAD
     
     if not csrf_token:
         abort(403)
         
-=======
-    if not csrf_token:
-        abort(403)
->>>>>>> f3d80e8c21dd62c97cc0cdf113c63483833025c1
     download_direct = os.path.dirname(os.path.abspath(__file__))
     filename = request.form.get('filename', '')
     file_path = os.path.join(download_direct, filename)
