@@ -92,3 +92,8 @@ span:focus{
   border: none;
   cursor: pointer;
 }
+
+.registration{
+  margin-top: 10px;
+  width: 100px;
+}

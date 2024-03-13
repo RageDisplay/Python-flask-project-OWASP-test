@@ -146,6 +146,30 @@ def download_manual():
     except Exception as e:
         return str(e), 500
     
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    csrf_token = session.get('csrf_token')
+    
+    if not csrf_token:
+        abort(403)
+    
+    if request.method == 'POST':
+        username = request.form['username']
+        password = sha256((sha256(username.encode()).hexdigest() + sha256((request.form['password']).encode()).hexdigest()).encode()).hexdigest()
+        
+        conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth")
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO users (username, password) VALUES (%s, %s)', (username, password))
+        conn.commit()
+        if conn:
+            cursor.close()
+            conn.close()
+            return render_template('registration.html', csrf_token=csrf_token)
+    else:
+        csrf_token = session.get('csrf_token')
+        return render_template('registration.html', csrf_token=csrf_token)
+
+    
 if __name__ == '__main__':
     app.secret_key = '123456789'
     app.run(ssl_context=('cert.pem', 'key.pem'), host='0.0.0.0', port=7000, debug=True)
