@@ -2,10 +2,10 @@
 <html>
 <head>
     <title>Search</title>
-    <link rel= "stylesheet" type= "text/css" href= "../static/styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/styles.css">
 </head>
 <body>
-    <h1>search</h1>
+    <h1>Search</h1>
     <form method="post" action="/search">
         <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <label for="query">Enter :</label>
@@ -14,8 +14,9 @@
     </form>
 
     <div>
-        <h2>results:</h2>
+        <h2>Results:</h2>
         <p>{{ result | safe }}</p>
     </div>
 </body>
 </html>
+

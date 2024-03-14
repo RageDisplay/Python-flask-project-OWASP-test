@@ -2,25 +2,29 @@
 <html>
 <head>
     <title>Login</title>
-    <link rel= "stylesheet" type= "text/css" href= "../static/styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/styles.css">
 </head>
 <body>
     <main>
         <h1>Login</h1>
         <form action="{{ url_for('authenticate') }}" method="post">
             <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
-            <div class="box">
+            <div class="input-box">
                 <input type="text" id="username" name="username" required placeholder="Username">
             </div>
 
-            <div class="box">    
+            <div class="input-box">    
                 <input type="password" id="password" name="password" required placeholder="Password">
             </div>    
 
-            <div class="samebox">
+            <div class="button-box">
                 <input type="submit" value="Login">
-                <div class="data" type="/button" onclick="redirectToSearch()">Search the data</div>
             </div>
+
+            <div class="search-box">
+                <div class="data" onclick="redirectToSearch()">Search the data</div>
+            </div> 
+
         </form>
     </main>
 </body>

@@ -2,15 +2,16 @@
 <html>
 <head>
     <title>Input Text</title>
-    <link rel= "stylesheet" type= "text/css" href= "../static/styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/styles.css">
 </head>
 <body>
     <h1>Input Text</h1>
     <form action="{{ url_for('save_text') }}?user_id={{ user_id }}" method="post">
         <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <label for="text">Enter Text:</label>
-        <textarea id="text" name="text" rows="4" cols="50" required></textarea><br><br>
+        <textarea id="text" name="text" rows="20" cols="50"></textarea>
         <input type="submit" value="Save">
     </form>
 </body>
 </html>
+

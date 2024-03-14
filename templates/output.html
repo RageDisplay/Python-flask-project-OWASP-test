@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Texts</title>
-    <link rel= "stylesheet" type= "text/css" href= "../static/styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/styles.css">
 </head>
 <body>
     <h1>Texts:</h1>
@@ -11,9 +11,9 @@
     <form action="/download" method="post">
         <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <textarea name="text" style="display: none;">{{ text_combined | safe }}</textarea>
-        <input type="submit" value="download">
+        <input type="submit" value="Download">
     </form>
-    <button onclick="redirectToSearch()">Manual download</button>
+    <button onclick="redirectToSearch()">Manual Download</button>
     <script>
         function redirectToSearch() {
             window.location.href = "/dwld";
@@ -21,4 +21,5 @@
     </script>
 </body>
 </html>
+
 

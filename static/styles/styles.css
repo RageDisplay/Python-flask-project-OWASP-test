@@ -1,7 +1,22 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
 form {
-  
-  width: 300px;
-  margin: 0 auto;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 label {
@@ -9,91 +24,47 @@ label {
   margin-bottom: 5px;
 }
 
-input[type="username"],
+input[type="text"],
 input[type="password"] {
-  width: 100%;
-  padding: 5px;
+  width: 96%;
+  padding: 10px;
   margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 input[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-}
-
-textarea {
   width: 100%;
-  padding: 5px;
-  margin-bottom: 10px;
-}
-
-p {
-  font-size: 18px;
-  line-height: 1.5;
-}
-
-body {
-  justify-content: center;
-  display: flex;
-}
-
-main {
-  margin-top: 10%;
-
-}
-
-.main-form{
-  margin-top: 10px;
-}
-
-.box{
-  position: relative;
-  width: 300px;
-  height: 50px;
-}
-
-.box input{
-  width: 100%;
-  border-radius: 15px;
   padding: 10px;
-
-  outline: none;
-
-}
-
-.box span{
-  position: absolute;
-  margin-top: 0%;
-  left: 10px;
-  padding: 12px;
-
-  transition: 500ms;
-
-}
-
-span:hover,
-span:focus{
-  opacity: 0;
-}
-
-.samebox{
-  flex-direction: column;
-}
-
-.data{
-  margin-top: 10px;
-  width: 100px;
-  background-color: #f30c0c;
-  color: white;
-  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.registration{
+input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.button-box {
+  text-align: center;
+}
+
+.search-box {
+  text-align: left;
+}
+
+.data {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: rgb(102, 0, 255); 
+  color: white; 
+  cursor: pointer;
+  border-radius: 5px;
   margin-top: 10px;
-  width: 100px;
+}
+
+.data:hover {
+  background-color: rgb(17, 176, 67); 
 }
