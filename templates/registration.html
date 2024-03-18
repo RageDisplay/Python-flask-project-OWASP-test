@@ -18,9 +18,20 @@
     <input type="password" id="password" name="password" required placeholder="Password">
 
     <input type="submit" value="Register">
+
+    <div class="search-box">
+        <div class="data" onclick="redirectToLogin()">Login</div>
+    </div>
+
 </form>
 
 </body>
 </html>
+
+<script>
+    function redirectToLogin() {
+        window.location.href = "/";
+    }
+</script>
 
 

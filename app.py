@@ -9,6 +9,8 @@ app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
 
 login_data = {}
 
+brute_force = 0
+
 @app.route('/')
 def login():
     csrf_token = generate_csrf()
@@ -18,6 +20,8 @@ def login():
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
     global login_data
+    
+    global brute_force
     
     csrf_token = session.get('csrf_token')
     
@@ -34,12 +38,19 @@ def authenticate():
     cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password))
     user = cursor.fetchone()
     conn.close()
-    
-    if user:
-        session['username'] = username
-        return redirect(url_for('input_text', csrf_token=csrf_token))
-    else:
-        return redirect(url_for('login'))
+
+    try:
+        if user:
+            session['username'] = username
+            brute_force = 0
+            return redirect(url_for('input_text', csrf_token=csrf_token))
+        else:
+            brute_force += 1
+            if brute_force > 3:
+                abort("Too many attempts")
+            return redirect(url_for('login'))
+    except Exception as e:
+        return str(e), 403
 
 @app.route('/input_text')
 def input_text():
@@ -87,7 +98,7 @@ def display_text():
     text_combined = ', '.join(text[0] for text in texts)
     csrf_token = session.get('csrf_token')
     return render_template('output.html', text_combined=text_combined, csrf_token=csrf_token)
-    
+
 @app.route('/download', methods=['POST'])
 def download_file():
     csrf_token = session.get('csrf_token')
@@ -162,8 +173,6 @@ def registration():
         cursor.execute('INSERT INTO users (username, password) VALUES (%s, %s)', (username, password))
         conn.commit()
         if conn:
-            cursor.close()
-            conn.close()
             return render_template('registration.html', csrf_token=csrf_token)
     else:
         csrf_token = session.get('csrf_token')
@@ -171,5 +180,5 @@ def registration():
 
     
 if __name__ == '__main__':
-    app.secret_key = '123456789'
+    app.secret_key = secrets.token_urlsafe(32)
     app.run(ssl_context=('cert.pem', 'key.pem'), host='0.0.0.0', port=7000, debug=True)
