@@ -3,7 +3,7 @@
 ## Зависимости
 
 - Flask
-- SQLite
+- Postgresql
 - WTForms
 - Flask-WTF
 
@@ -30,7 +30,6 @@
 ### app.py
 
 - app.py - основной файл Flask-app
-- db_path - путь к базе данных
 - login_data - хранит логин и пароль пользователя
 - csrf - CSRF-токен
 
@@ -59,7 +58,6 @@
 ## Ссылки
 
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
-- [SQLite](https://www.sqlite.org/index.html)
 - [WTForms](https://wtforms.readthedocs.io/en/2.3.x/)
 - [Flask-WTF](https://flask-wtf.readthedocs.io/en/0.14.3/)
 - [CSRF-токен](https://ru.wikipedia.org/wiki/Cross-site_request_forgery)
