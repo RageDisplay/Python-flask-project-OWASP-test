@@ -1,5 +1,5 @@
 # Устанавливаем базовый образ
-FROM ubuntu:latest
+FROM ubuntu:22.04
 
 # Устанавливаем переменную окружения для noninteractive режима
 ENV DEBIAN_FRONTEND=noninteractive
@@ -7,22 +7,17 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Обновляем пакеты и устанавливаем необходимые зависимости
 RUN apt-get update && apt-get install -y sudo python3 python3-pip postgresql postgresql-contrib postgresql-server-dev-all gcc musl-dev python3-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Выдача прав судо
 RUN usermod -aG sudo postgres
-
 # Создаем рабочую директорию
 WORKDIR /app
 
 # Копируем файлы зависимостей и устанавливаем их
 COPY ./requirements.txt /app/requirements.txt
-
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем статические файлы и шаблоны
 COPY /static/styles/. /app/static/styles
-
 COPY /templates/. /app/templates
-
 COPY . /app
 
 # Переключаемся на пользователя postgres
@@ -45,3 +40,4 @@ USER root
 
 # Запускаем сервис PostgreSQL и запускаем приложение
 CMD service postgresql start && python3 TESTcreatetables.py && python3 TESTcreateusers.py && python3 app.py
+# 
