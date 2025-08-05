@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-test
+  labels:
+    app: myapp-test
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: myapp-test
+  template:
+    metadata:
+      labels:
+        app: myapp-test
+    spec:
+      containers:
+      - name: myapp-test
+        image: ragedisplay/app-for-owasp-test:flaskwork
+        ports:
+        - containerPort: 7000
