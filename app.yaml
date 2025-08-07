@@ -5,7 +5,7 @@ metadata:
   labels:
     app: myapp-test
 spec:
-  replicas: 0
+  replicas: 6
   selector:
     matchLabels:
       app: myapp-test
@@ -14,8 +14,17 @@ spec:
       labels:
         app: myapp-test
     spec:
+      nodeSelector:
+        node-role.kubernetes.io/worker: "true"
       containers:
       - name: myapp-test
         image: ragedisplay/app-for-owasp-test:flaskwork
         ports:
         - containerPort: 7000
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "1000m"
+            memory: "512Mi"
