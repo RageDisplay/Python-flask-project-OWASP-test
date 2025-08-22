@@ -117,7 +117,7 @@ def search():
     
     if not csrf_token:
         abort(403)
-        
+        #just secret
     conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth")
     cursor = conn.cursor()
     
@@ -181,4 +181,5 @@ def registration():
     
 if __name__ == '__main__':
     app.secret_key = secrets.token_urlsafe(32)
+
     app.run(ssl_context=('cert.pem', 'key.pem'), host='0.0.0.0', port=7000, debug=True)
