@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "ragedisplay/app-for-owasp-test:flaskwork"
         KUBE_NAMESPACE = "flask-app"
-        REGISTRY_CREDENTIALS = credentials('docker-hub-credentials')
+        REGISTRY_CREDENTIALS = "docker-hub-credentials"
     }
     stages {
         stage('Checkout') {
@@ -18,7 +18,7 @@ pipeline {
                 }
             }
         }
-        stage('Trivy Security Scan') {
+        stage('Scan for Vulnerabilities') {
             steps {
                 script {
                     sh "trivy image --exit-code 1 --severity CRITICAL ${DOCKER_IMAGE}"
@@ -37,10 +37,10 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Обновляем образ в Kubernetes
+                    // Обновляем конфигурацию deployment в Kubernetes
                     sh """
-                        kubectl set image deployment/flask-app flask-app=${DOCKER_IMAGE} -n ${KUBE_NAMESPACE} --record
-                        kubectl rollout status deployment/flask-app -n ${KUBE_NAMESPACE}
+                        kubectl set image deployment/flask-app-deployment flask-app=${DOCKER_IMAGE} -n ${KUBE_NAMESPACE} --record=true
+                        kubectl rollout status deployment/flask-app-deployment -n ${KUBE_NAMESPACE}
                     """
                 }
             }
@@ -48,7 +48,10 @@ pipeline {
     }
     post {
         failure {
-            emailext body: "Сборка ${env.BUILD_URL} завершилась с ошибкой", subject: "FAILED: ${env.JOB_NAME}", to: "dev@example.com"
+            echo 'Pipeline failed!'
+        }
+        success {
+            echo 'Pipeline succeeded!'
         }
     }
 }
