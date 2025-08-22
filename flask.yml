@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-app-deployment
+  name: flask-app
   namespace: flask-app
 spec:
-  replicas: 2
+  replicas: 0
   selector:
     matchLabels:
       app: flask-app
@@ -18,20 +18,17 @@ spec:
         image: ragedisplay/app-for-owasp-test:flaskwork
         ports:
         - containerPort: 7000
-        env:
-        - name: POSTGRES_HOST
-          value: "localhost"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: flask-app-service
+  name: flask-service
   namespace: flask-app
 spec:
   selector:
     app: flask-app
   ports:
     - protocol: TCP
-      port: 7000
+      port: 80
       targetPort: 7000
   type: LoadBalancer
