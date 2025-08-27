@@ -39,5 +39,5 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/14/main/postgresql.conf
 USER root
 
 # Запускаем сервис PostgreSQL и запускаем приложение
-CMD service postgresql start && python3 TESTcreatetables.py && python3 TESTcreateusers.py && python3 app.py
+CMD service postgresql start && python3 test_template/TESTcreatetables.py && python3 test_template/TESTcreateusers.py && python3 app.py
 # 

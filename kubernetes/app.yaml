@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-test
+  labels:
+    app: myapp-test
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: myapp-test
+  template:
+    metadata:
+      labels:
+        app: myapp-test
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/worker: "true"
+      containers:
+      - name: myapp-test
+        image: ragedisplay/app-for-owasp-test:FLASKWORK_TAG
+        ports:
+        - containerPort: 7000
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "1000m"
+            memory: "512Mi"

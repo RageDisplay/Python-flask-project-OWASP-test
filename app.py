@@ -31,7 +31,7 @@ def authenticate():
     username = request.form['username']
     password = sha256((sha256(username.encode()).hexdigest() + sha256((request.form['password']).encode()).hexdigest()).encode()).hexdigest()
     
-    login_data = {'username': username, 'password': password}
+    login_data = {'username': username, 'password': password} # требуется скрыть пароль
     
     conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth")
     cursor = conn.cursor()
@@ -87,8 +87,8 @@ def save_text():
 
 @app.route('/display_text')
 def display_text():
-    user_id = request.args.get('user_id')
-    conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth")
+    user_id = request.args.get('user_id') # нет проверки доступа, позже добавлю
+    conn = psycopg2.connect(host="localhost", port="5432", user="postgres", password="pass", database="auth") # требуется скрыть пароль
     cursor = conn.cursor()
     cursor.execute('SELECT text FROM texts WHERE user_id=%s', (user_id))
     texts = cursor.fetchall()
@@ -182,4 +182,4 @@ def registration():
 if __name__ == '__main__':
     app.secret_key = secrets.token_urlsafe(32)
 
-    app.run(ssl_context=('cert.pem', 'key.pem'), host='0.0.0.0', port=7000, debug=True)
+    app.run(ssl_context=('ssl/cert.pem', 'ssl/key.pem'), host='0.0.0.0', port=7000, debug=True)
