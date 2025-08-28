@@ -11,6 +11,7 @@ login_data = {}
 
 brute_force = 0
 
+
 @app.route('/')
 def login():
     csrf_token = generate_csrf()
