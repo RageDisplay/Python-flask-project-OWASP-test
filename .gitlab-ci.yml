@@ -1,0 +1,58 @@
+stages:
+  - build
+  - test
+  - security
+  - deploy
+
+variables:
+  DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  KUBE_NAMESPACE: your-namespace
+
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker build -t $DOCKER_IMAGE .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $DOCKER_IMAGE
+
+test:
+  stage: test
+  image: python:3.8
+  before_script:
+    - pip install -r requirements.txt
+  script:
+    - echo "Running unit tests..." # Заглушка на время
+    
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
+
+container_scanning_with_trivy:
+  stage: security
+  image: aquasec/trivy:latest
+  variables:
+    TRIVY_USERNAME: "$CI_REGISTRY_USER"
+    TRIVY_PASSWORD: "$CI_REGISTRY_PASSWORD"
+    TRIVY_AUTH_URL: "$CI_REGISTRY"
+  script:
+    - trivy image --exit-code 1 --no-progress $DOCKER_IMAGE
+
+deploy:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl config set-cluster my-cluster --server=$KUBE_SERVER --certificate-authority=$KUBE_CA_CERT
+    - kubectl config set-credentials my-user --token=$KUBE_TOKEN
+    - kubectl config set-context my-context --cluster=my-cluster --user=my-user --namespace=$KUBE_NAMESPACE
+    - kubectl config use-context my-context
+    - kubectl set image deployment/myapp-test myapp-test=$DOCKER_IMAGE -n $KUBE_NAMESPACE
+    - kubectl rollout status deployment/myapp-test -n $KUBE_NAMESPACE
+  only:
+    - main
